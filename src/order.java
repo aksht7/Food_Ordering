@@ -12,16 +12,21 @@ import java.awt.Image;
 import java.awt.Color;
 import java.awt.Panel;
 import javax.swing.JCheckBox;
-import java.awt.Scrollbar;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.*;
 import java.awt.event.ActionEvent;
+import javax.swing.JTextField;
 
 public class order extends JFrame {
 
 	private JPanel contentPane;
+	private JTextField txt1;
+	private JTextField txt2;
 
 	/**
 	 * Launch the application.
@@ -54,13 +59,13 @@ public class order extends JFrame {
 		
 		Panel panel = new Panel();
 		panel.setBackground(new Color(0, 191, 255));
-		panel.setBounds(0, 25, 442, 63);
+		panel.setBounds(0, 21, 442, 63);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("Let's Order Something.....");
 		lblNewLabel.setForeground(new Color(255, 255, 255));
-		lblNewLabel.setBounds(0, 0, 411, 63);
+		lblNewLabel.setBounds(10, 0, 411, 63);
 		panel.add(lblNewLabel);
 		lblNewLabel.setBackground(new Color(0, 191, 255));
 		lblNewLabel.setFont(new Font("Tempus Sans ITC", Font.BOLD | Font.ITALIC, 35));
@@ -227,7 +232,7 @@ public class order extends JFrame {
 		JButton bt = new JButton("Confirm Order");
 		bt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				float a=0;
+				int a=0;
 				String msg="";
 				if(c1.isSelected())
 				{
@@ -290,12 +295,29 @@ public class order extends JFrame {
 					a+=90;
 				}
 				JOptionPane.showMessageDialog(null,"Total Price:"+msg+a);
+				String name=txt1.getText().trim();
+				int phone_no=Integer.parseInt(txt2.getText());
+				
+				try{
+		 			Class.forName("com.mysql.jdbc.Driver");  
+		 			Connection con=DriverManager.getConnection(  
+		 			"jdbc:mysql://localhost:3306/Order_Food","root","root");  
+		 			//here Order_Food is database name, root is username and password  
+		 			Statement stmt=con.createStatement();  
+		 			String sql= "insert into Customer values("+"'"+name+"',"+phone_no+","+a+");";
+		 		   stmt.executeUpdate(sql);
+		 		  JOptionPane.showMessageDialog(null,"Added Successfully");
+		 			}
+		 				catch(Exception z)
+		 		{ 
+		 					JOptionPane.showMessageDialog(null,z.getMessage());
+		 			}  
 			}
 		});
 		bt.setForeground(new Color(0, 191, 255));
 		bt.setBackground(new Color(255, 255, 255));
-		bt.setFont(new Font("Verdana", Font.BOLD, 20));
-		bt.setBounds(685, 579, 332, 72);
+		bt.setFont(new Font("Verdana", Font.BOLD, 22));
+		bt.setBounds(759, 520, 276, 96);
 		bt.setBorder(null);
 		contentPane.add(bt);
 		
@@ -306,6 +328,7 @@ public class order extends JFrame {
 		contentPane.add(label);
 		
 		JLabel lblNewLabel_2 = new JLabel("");
+		lblNewLabel_2.setBackground(Color.WHITE);
 		lblNewLabel_2.setBounds(-69, 190, 1104, 552);
 		Image img = new ImageIcon(this.getClass().getResource("/kfc.jpg")).getImage();
 		lblNewLabel_2.setIcon(new ImageIcon(img));
@@ -324,6 +347,30 @@ public class order extends JFrame {
 		bt2.setBounds(937, 11, 113, 34);
 		bt2.setBorder(null);
 		contentPane.add(bt2);
+		
+		JLabel l1 = new JLabel(" Customer Name");
+		l1.setFont(new Font("Yu Gothic Light", Font.BOLD, 17));
+		l1.setBounds(10, 106, 145, 20);
+		contentPane.add(l1);
+		
+		txt1 = new JTextField();
+		txt1.setFont(new Font("Yu Gothic Light", Font.BOLD, 14));
+		txt1.setBounds(182, 108, 139, 20);
+		contentPane.add(txt1);
+		txt1.setColumns(10);
+		
+		JLabel l2 = new JLabel("Phone No.");
+		l2.setFont(new Font("Yu Gothic Light", Font.BOLD, 17));
+		l2.setBounds(20, 137, 113, 20);
+		contentPane.add(l2);
+		
+		txt2 = new JTextField();
+		txt2.setFont(new Font("Yu Gothic Light", Font.BOLD, 13));
+		txt2.setBounds(182, 137, 139, 20);
+		contentPane.add(txt2);
+		txt2.setColumns(10);
+		
+		
 	
 	}
 }
