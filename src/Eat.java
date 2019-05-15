@@ -60,6 +60,7 @@ public class Eat extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				order open= new order();
 				open.setVisible(true);
+				setVisible(false);
 			}
 		});
 		bt1.setBackground(new Color(255, 255, 255));
